@@ -17,7 +17,7 @@ app.use("/users", users);
 app.use("/products", products)
 
 
-app.set("port", process.env.port || 4050);
+app.set("port", process.env.port || 5000);
 app.listen(app.get("port"), (server) => {
   console.info(`Server listen on port ${app.get("port")}`);
 });
