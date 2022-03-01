@@ -115,49 +115,49 @@ async function getUser(req, res, next) {
 
 // Cart Router
 router.get("/:id/cart",async (req, res, next) => {
-  try {
-    res.json(req.user.cart);
-  } catch (error) {
-    res.status(500).json({ msg: error });
-  }
-});
-//updates 
-router.put("/:id/cart", [auth, getProduct], async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-  const inCart = user.cart.some((prod) => prod._id == req.params.id);
-  if (inCart) {
-    product.quantity += req.body.quantity;
-    const updatedUser = await user.save();
-    try {
-      res.status(201).json(updatedUser.cart);
-    } catch (error) {
-      res.status(500).json(console.log(error));
-    }
-  } else {
-    try {
-      let product_id = res.product._id;
-      let name = res.product.name;
-      let category = res.product.category;
-      let img = res.product.img;
-      let price = res.product.price;
-      let quantity = req.body;
-      let created_by = req.user._id;
-      user.cart.push({
-        product_id,
-        name,
-        category,
-        img,
-        price,
-        quantity,
-        created_by,
-      });
-      const updatedUser = await user.save();
-      res.status(201).json(updatedUser.cart);
-    } catch (error) {
-      res.status(500).json(console.log(error));
-    }
-  }
-});
+//   try {
+//     res.json(req.user.cart);
+//   } catch (error) {
+//     res.status(500).json({ msg: error });
+//   }
+// });
+// //updates 
+// router.put("/:id/cart", [auth, getProduct], async (req, res, next) => {
+//   const user = await User.findById(req.user._id);
+//   const inCart = user.cart.some((prod) => prod._id == req.params.id);
+//   if (inCart) {
+//     product.quantity += req.body.quantity;
+//     const updatedUser = await user.save();
+//     try {
+//       res.status(201).json(updatedUser.cart);
+//     } catch (error) {
+//       res.status(500).json(console.log(error));
+//     }
+//   } else {
+//     try {
+//       let product_id = res.product._id;
+//       let name = res.product.name;
+//       let category = res.product.category;
+//       let img = res.product.img;
+//       let price = res.product.price;
+//       let quantity = req.body;
+//       let created_by = req.user._id;
+//       user.cart.push({
+//         product_id,
+//         name,
+//         category,
+//         img,
+//         price,
+//         quantity,
+//         created_by,
+//       });
+//       const updatedUser = await user.save();
+//       res.status(201).json(updatedUser.cart);
+//     } catch (error) {
+//       res.status(500).json(console.log(error));
+//     }
+//   }
+// });
 
 
 module.exports = router;
