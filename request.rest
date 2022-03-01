@@ -1,0 +1,27 @@
+GET http://localhost:4050/users/
+
+###
+
+GET http://localhost:4050/users/62163dfc2edce5d62c48e593
+
+###
+DELETE http://localhost:4050/users/62163dfc2edce5d62c48e593
+
+###
+
+PATCH http://localhost:4050/users/6218915fc892aac6a1582c8a
+Content-Type: application/json
+
+{
+    "name": "buhle magunya"
+    
+}
+###
+POST http://localhost:4050/users
+Content-Type: application/son
+{
+    "name":"Simthe Pololo",
+    "email":"ema@gmail.com",
+    "message":"lumka",
+    "hasehdPassword":"hahahhs"
+}
