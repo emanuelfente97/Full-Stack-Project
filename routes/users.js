@@ -114,7 +114,7 @@ async function getUser(req, res, next) {
 }
 
 // Cart Router
-router.get("/:id/cart",async (req, res, next) => {
+// router.get("/:id/cart",async (req, res, next) => {
 //   try {
 //     res.json(req.user.cart);
 //   } catch (error) {
