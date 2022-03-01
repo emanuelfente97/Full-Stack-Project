@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
-const auth = require("../middleware/auth");
 const Product = require("../models/product");
+const auth = require("../middleware/auth");
+const { getUser, getProduct} =require("../middleware/finders")
+const router = express.Router();
 
 // Getting all
 router.get("/", auth, async (req, res) => {
@@ -78,17 +79,5 @@ router.get("/", auth, async (req, res) => {
     }
   });
 
-  //Find Schema for products
-  async function getProduct(req, res, next) {
-    let product;
-    try {
-      product = await Product.findById(req.params.id);
-  
-      if (!product) res.status(404).json({ message: "Could not find user" });
-    } catch (error) {
-      return res.status(500).json({ message: error.message });
-    }
-    res.product = product;
-    next();
-  }
+ 
 module.exports = router
