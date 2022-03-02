@@ -5,8 +5,8 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const auth = require("../middleware/auth");
-const jwt = require ("jsonwebtoken");
-const { getUser, getProduct } = require("../middleware/finders")
+const jwt = require("jsonwebtoken");
+const { getUser, getProduct } = require("../middleware/finders");
 
 // const Users = [];
 // Getting all
@@ -39,9 +39,7 @@ router.post("/", async (req, res) => {
     const newUser = await user.save();
     // user.push(user)
     res.status(201).json(newUser);
-   
   } catch (err) {
-
     res.status(400).json({ message: err.message });
   }
 });
@@ -70,9 +68,8 @@ router.patch("/", async (req, res, next) => {
   }
 });
 
-
 // Updating One
-router.patch("/:id", getUser, async (req, res) => {
+router.put("/:id", getUser, async (req, res) => {
   if (req.body.name != null) {
     res.user.name = req.body.name;
   }
@@ -103,20 +100,18 @@ router.delete("/:id", getUser, async (req, res) => {
   }
 });
 
-
-
 //Carts
 //getting all items in cart
-router.get("/:id/cart", auth, async (req, res, next) => {
+router.get("/:id/cart",[auth, getUser] ,async (req, res, next) => {
   try {
-    res.json(req.user.cart);
+    res.json(res.user.cart);
   } catch (error) {
     res.status(500).json({ msg: error });
   }
 });
 
-//Adding an item 
-router.put("/:id/cart", [auth, getProduct], async (req, res, next) => {
+//Adding an item
+router.post("/:id/cart", [auth, getProduct], async (req, res, next) => {
   const user = await User.findById(req.user._id);
   const inCart = user.cart.some((prod) => prod._id == req.params.id);
   if (inCart) {
@@ -153,46 +148,30 @@ router.put("/:id/cart", [auth, getProduct], async (req, res, next) => {
   }
 });
 //updates the items in the users cart
-router.put("/:id/cart", [auth, getProduct], async (req, res, next) => {
-  const user = await User.findById(req.user._id);
-  const inCart = user.cart.some((prod) => prod._id == req.params.id);
-  if (inCart) {
-    product.quantity += req.body.quantity;
-    const updatedUser = await user.save();
-    try {
-      res.status(201).json(updatedUser.cart);
-    } catch (error) {
-      res.status(500).json(console.log(error));
-    }
-  } else {
-    try {
-      let product_id = res.product._id;
-      let title = res.product.title;
-      let category = res.product.category;
-      let img = res.product.img;
-      let price = res.product.price;
-      let quantity = req.body;
-      let created_by = req.user._id;
-      user.cart.push({
-        product_id,
-        title,
-        category,
-        img,
-        price,
-        quantity,
-        created_by,
-      });
-      const updatedUser = await user.save();
-      res.status(201).json(updatedUser.cart);
-    } catch (error) {
-      res.status(500).json(console.log(error));
+router.put("/:id/cart", [auth, getProduct],
+  async (req, res, next) => {
+    const user = await User.findById(req.user._id);
+    const inCart = user.cart.some((prod) => prod.product_id == req.params.id);
+    console.log(inCart);
+
+    if (inCart) {
+      try {
+        const product = user.cart.find(
+          (prod) => prod.product_id == req.params.id
+        );
+        product.quantity = req.body.quantity;
+        user.cart.quantity = product.quantity;
+        user.markModified("cart");
+        const updatedUser = await user.save();
+        console.log(updatedUser);
+        res.status(201).json(updatedUser.cart);
+      } catch (error) {
+        res.status(500).json(console.log(error));
+      }
     }
   }
-});
-
+);
 //clears the user cart
-router.delete("/:id/cart", [auth, getProduct], async (req, res, next) => {
-  
-});
+router.delete("/:id/cart", [auth, getProduct], async (req, res, next) => {});
 
 module.exports = router;
