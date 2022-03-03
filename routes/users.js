@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 
 //Log in with email and password
 
-router.patch("/", async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -171,7 +171,7 @@ router.put("/:id/cart", [auth, getProduct],
     }
   }
 );
-//clears the user cart
+//Deleting in user cart
 router.delete("/:id/cart", [auth, getProduct], async (req, res, next) => {});
 
 module.exports = router;
